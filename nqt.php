@@ -1,11 +1,17 @@
 
 <?
 ########################################################################
-# nqt.php last revised    02/19/05 (http://www.shat.net/php/nqt/)      #
+# nqt.php                                                              #
+#                                                                      #
+# GitHub repository created 04/17/13(https://github.com/sethcoder/nqt) #
+#         last revised    02/19/05  (http://www.shat.net/php/nqt/)     #
 #         Initial release 03/11/01                                     #
 #         NQT is now nearly four years old and still in wide use!      #
 #                                                                      #
 # Copyright (C) shaun@shat.net. Full license follows update history.   #
+#                                                                      #
+# Version 1.8                                                          #
+# 04/17/13: Created GitHub repository.                                 # 
 #                                                                      #
 # Version 1.7                                                          #
 # 02/19/05: Added support for Italian domains (.it), with thanks to    #
@@ -378,15 +384,10 @@ if( ($queryType=="all") || ($queryType=="tr") )
   tr($target);
 }
 
-/*
-<hr>
-<p align="right"><font face="verdana,arial" size=1 color="#ffffff">NQT20050219
-<a href="http://shat.net/php/nqt/"><font color="#cccccc">Network Query Tool 1.7</a>
-<br>Copyright &copy; 2001-<?php echo date('Y');?>, shaun@shat.net</font></p>
-
-
-
-// include("http://www.sethcoder.com/");
-*/
 ?>
 
+<hr>
+<p align="right"><font face="verdana,arial" size=1 color="#ffffff">NQT20050219
+<a href="https://github.com/sethcoder/nqt"><font color="#cccccc">Network Query Tool 1.8</a> <br>
+Originally found at <a href="http://www.shat.net/php/nqt/ "><font color="#cccccc">www.shat.net/php/nqt/</a><br>
+Copyright &copy; 2001-<?php echo date('Y');?>, shaun@shat.net</font></p>
