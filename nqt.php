@@ -387,7 +387,7 @@ if( ($queryType=="all") || ($queryType=="tr") )
 ?>
 
 <hr>
-<p align="right"><font face="verdana,arial" size=1 color="#000000">NQT20050219
+<p align="right"><font face="verdana,arial" size=1 color="#000000">NQT20130417
 <a href="https://github.com/sethcoder/nqt"><font color="#777777">Network Query Tool 1.8</a> <br>
 Originally found at <a href="http://www.shat.net/php/nqt/ "><font color="#777777">www.shat.net/php/nqt/</a><br>
 Copyright &copy; 2001-<?php echo date('Y');?>, shaun@shat.net</font></p>
