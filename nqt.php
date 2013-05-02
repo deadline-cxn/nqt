@@ -3,12 +3,21 @@
 ########################################################################
 # nqt.php                                                              #
 #                                                                      #
-# GitHub repository created 04/17/13(https://github.com/sethcoder/nqt) #
-#         last revised    02/19/05  (http://www.shat.net/php/nqt/)     #
-#         Initial release 03/11/01                                     #
-#         NQT is now nearly four years old and still in wide use!      #
+# GitHub repository created 04/17/13 https://github.com/sethcoder/nqt  #
+#        last revised    02/19/05    http://www.shat.net/php/nqt/      #
+#        Initial release 03/11/01                                      #
 #                                                                      #
-# Copyright (C) shaun@shat.net. Full license follows update history.   #
+# Homepage: http://www.sethcoder.com/                                  #
+# Twitter: @Sethcoder                                                  #
+# email: defectiveseth@gmail.com                                       #
+#                                                                      #
+# Version 2.0.0                                                        #
+# 05/02/13:                                                            #
+# - Fixed deprecated eregi errors                                      #
+# - Fixed deprecated split errors											 #
+# - Added http://www.nirsoft.net/whois-servers.txt This will allow     #
+#   support for all domain types.                                      #
+# - Added Update WHOIS file which will download the latest version     #
 #                                                                      #
 # Version 1.8                                                          #
 # 04/17/13: Created GitHub repository.                                 # 
@@ -91,8 +100,43 @@
 # If you encounter problems with traceroute, replace the default path  #
 # /usr/sbin/traceroute with the correct path in the tr() function.     #
 ########################################################################
+$nqtversion ="2.0.0";
+$nqtdate    ="NQT20130502";
+array($whois);
 
-#Until I rewrite my scripts, this will suffice for compatibility
+function update_whois_file(){
+	message("Downloading http://www.nirsoft.net/whois-servers.txt<br>");
+	system("wget http://www.nirsoft.net/whois-servers.txt -O whois-servers.txt.tmp");
+	if(file_exists("whois-servers.txt.tmp")) {
+		$filesize=filesize("whois-servers.txt.tmp");
+		if($filesize>2) {
+			message("Saved to whois-servers.txt.tmp($filesize) bytes<br>");
+			message("Renaming whois-servers.txt to whois-servers.txt.old<br>");
+			system("mv whois-servers.txt whois-servers.txt.old");
+			message("Renaming whois-servers.txt.tmp to whois-servers.txt<br>");
+			system("mv whois-servers.txt.tmp whois-servers.txt");
+		} else {
+			$errmsg="CHECK PERMISSIONS FOR NQT FOLDER";
+		}
+	} else {
+		$errmsg="CHECK PERMISSIONS FOR NQT FOLDER";
+	}
+	errmessage($errmsg);
+}
+
+function get_whois_servers(){
+	global $whois;
+	$fp=fopen("whois-servers.txt","rt");
+	while($ln=fgets($fp,256)) {
+		if(substr($ln,0,1)!=";") {
+			$x=explode(" ",$ln);
+			$whois[$x[0]]=$x[1];
+		}
+	}
+	fclose($fp);
+}
+get_whois_servers();
+
 if(phpversion() >= "4.2.0"){
    extract($_POST);
    extract($_GET);
@@ -145,7 +189,9 @@ type="text" name="portNum" size="5" maxlength="5" value="80">
           <input type="radio" name="queryType" value="tr">
           Traceroute to host<br>
           <input type="radio" name="queryType" value="all" checked>
-          Do it all</font></td>
+          Do it all<br>
+		  <input type="radio" name="queryType" value="updatewhois">
+		  Update WHOIS file <br></font></td>
       </tr>
 
       </table>
@@ -169,6 +215,10 @@ $ntarget = "";
 
 #Some functions
 
+function errmessage($msg){
+echo "<font style=\"color:red; font-family: Verdana,arial; font-weight:bold; font-style:italic;\" size=2>$msg</font>";
+flush();
+}
 function message($msg){
 echo "<font face=\"verdana,arial\" size=2>$msg</font>";
 flush();
@@ -177,7 +227,7 @@ flush();
 function lookup($target){
 global $ntarget;
 $msg = "$target resolved to ";
-if( eregi("[a-zA-Z]", $target) )
+if( preg_match("/[a-zA-Z]/", $target) )
   $ntarget = gethostbyname($target);
 else
   $ntarget = gethostbyaddr($target);
@@ -189,11 +239,11 @@ function dig($target){
 global $ntarget;
 message("<p><b>DNS Query Results:</b><blockquote>");
 #$target = gethostbyaddr($target);
-#if (! eregi("[a-zA-Z]", ($target = gethostbyaddr($target))) )
-if( (!eregi("[a-zA-Z]", $target) && (!eregi("[a-zA-Z]", $ntarget))))
+#if (! preg_match("/[a-zA-Z]/", ($target = gethostbyaddr($target))) )
+if( (!preg_match("/[a-zA-Z]/", $target) && (!preg_match("/[a-zA-Z]/", $ntarget))))
   $msg .= "Can't do a DNS query without a hostname.";
 else{
-  if(!eregi("[a-zA-Z]", $target)) $target = $ntarget;
+  if(!preg_match("/[a-zA-Z]/", $target)) $target = $ntarget;
   if (! $msg .= trim(nl2br(`dig any '$target'`))) #bugfix
     $msg .= "The <i>dig</i> command is not working on your system.";
   }
@@ -204,54 +254,41 @@ message($msg);
 
 function wwwhois($target){
 global $ntarget;
+global $whois;
 $server = "whois.crsnic.net";
 message("<p><b>WWWhois Results:</b><blockquote>");
 #Determine which WHOIS server to use for the supplied TLD
-if((eregi("\.com\$|\.net\$|\.edu\$", $target)) || (eregi("\.com\$|\.net\$|\.edu\$", $ntarget)))
-  $server = "whois.crsnic.net";
-else if((eregi("\.info\$", $target)) || (eregi("\.info\$", $ntarget)))
-  $server = "whois.afilias.net";
-else if((eregi("\.org\$", $target)) || (eregi("\.org\$", $ntarget)))
-  $server = "whois.corenic.net";
-else if((eregi("\.name\$", $target)) || (eregi("\.name\$", $ntarget)))
-  $server = "whois.nic.name";
-else if((eregi("\.biz\$", $target)) || (eregi("\.biz\$", $ntarget)))
-  $server = "whois.nic.biz";
-else if((eregi("\.us\$", $target)) || (eregi("\.us\$", $ntarget)))
-  $server = "whois.nic.us";
-else if((eregi("\.cc\$", $target)) || (eregi("\.cc\$", $ntarget)))
-  $server = "whois.enicregistrar.com";
-else if((eregi("\.ws\$", $target)) || (eregi("\.ws\$", $ntarget)))
-  $server = "whois.nic.ws";
-else if((eregi("\.it\$", $target)) || (eregi("\.it\$", $ntarget)))
-  $server = "whois.nic.it";
-else{
-  $msg .= "I only support .com, .net, .org, .edu, .info, .name, .us, .cc, .ws, and .biz.</blockquote>";
-  message($msg);
-  return;
-}
+
+$x=explode(".",$target);
+$y=explode(".",$ntarget);
+
+$server=trim($whois[$x[count($x)-1]]);
+if(empty($server))
+	$server=trim($whois[$y[count($y)-1]]);
+
+echo "Using whois server: $server<br>";
 
 message("Connecting to $server...<br><br>");
-if (! $sock = fsockopen($server, 43, $num, $error, 10)){
+if (! $sock = @fsockopen($server, 43, $num, $error, 10)){
   unset($sock);
   $msg .= "Timed-out connecting to $server (port 43)";
 }
 else{
-  fputs($sock, "$target\n");
+  @fputs($sock, "$target\n");
   while (!feof($sock))
     $buffer .= fgets($sock, 10240);
 }
- fclose($sock);
- if(! eregi("Whois Server:", $buffer)){
-   if(eregi("no match", $buffer))
+ @fclose($sock);
+ if(! preg_match("/Whois Server:/", $buffer)){
+   if(preg_match("/no match/", $buffer))
      message("NOT FOUND: No match for $target<br>");
    else
      message("Ambiguous query, multiple matches for $target:<br>");
  }
  else{
-   $buffer = split("\n", $buffer);
+   $buffer = explode("\n", $buffer);
    for ($i=0; $i<sizeof($buffer); $i++){
-     if (eregi("Whois Server:", $buffer[$i]))
+     if (preg_match("/Whois Server:/", $buffer[$i]))
        $buffer = $buffer[$i];
    }
    $nextServer = substr($buffer, 17, (strlen($buffer)-17));
@@ -291,16 +328,16 @@ else{
       $buffer .= fgets($sock, 10240);
     fclose($sock);
     }
-   if (eregi("RIPE.NET", $buffer))
+   if (preg_match("/RIPE.NET/", $buffer))
      $nextServer = "whois.ripe.net";
-   else if (eregi("whois.apnic.net", $buffer))
+   else if (preg_match("/whois.apnic.net/", $buffer))
      $nextServer = "whois.apnic.net";
-   else if (eregi("nic.ad.jp", $buffer)){
+   else if (preg_match("/nic.ad.jp/", $buffer)){
      $nextServer = "whois.nic.ad.jp";
      #/e suppresses Japanese character output from JPNIC
      $extra = "/e";
      }
-   else if (eregi("whois.registro.br", $buffer))
+   else if (preg_match("/whois.registro.br/", $buffer))
      $nextServer = "whois.registro.br";
    if($nextServer){
      $buffer = "";
@@ -361,33 +398,32 @@ if($queryType)
 
 #Make sure the target appears valid
 
-if( (!$target) || (!preg_match("/^[\w\d\.\-]+\.[\w\d]{1,4}$/i",$target)) ){ #bugfix
-  message("Error: You did not specify a valid target host or IP.");
-  
-  }
-
-#Figure out which tasks to perform, and do them
-
-if( ($queryType=="all") || ($queryType=="lookup") )
-  lookup($target);
-if( ($queryType=="all") || ($queryType=="dig") )
-  dig($target);
-if( ($queryType=="all") || ($queryType=="wwwhois") )
-  wwwhois($target);
-if( ($queryType=="all") || ($queryType=="arin") )
-  arin($target);
-if( ($queryType=="all") || ($queryType=="checkp") )
-  checkp($target,$portNum);
-if( ($queryType=="all") || ($queryType=="p") )
-  p($target);
-if( ($queryType=="all") || ($queryType=="tr") )
-  tr($target);
+if($queryType=="updatewhois") {
+	update_whois_file();
+} 
+else {
+	if( (!$target) || (!preg_match("/^[\w\d\.\-]+\.[\w\d]{1,4}$/i",$target)) ){ #bugfix
+		errmessage("Error: You did not specify a valid target host or IP.");
+	}
+	#Figure out which tasks to perform, and do them
+	else {
+	if( ($queryType=="all") || ($queryType=="lookup") )  lookup($target);
+	if( ($queryType=="all") || ($queryType=="dig") )
+	  dig($target);
+	if( ($queryType=="all") || ($queryType=="wwwhois") )
+	  wwwhois($target);
+	if( ($queryType=="all") || ($queryType=="arin") )
+	  arin($target);
+	if( ($queryType=="all") || ($queryType=="checkp") )
+	  checkp($target,$portNum);
+	if( ($queryType=="all") || ($queryType=="p") )
+	  p($target);
+	if( ($queryType=="all") || ($queryType=="tr") )
+	  tr($target);
+	}
+}
+	
 }
 
 ?>
-
-<hr>
-<p align="right"><font face="verdana,arial" size=1 color="#000000">NQT20130417
-<a href="https://github.com/sethcoder/nqt"><font color="#777777">Network Query Tool 1.8</a> <br>
-Originally found at <a href="http://www.shat.net/php/nqt/ "><font color="#777777">www.shat.net/php/nqt/</a><br>
-Copyright &copy; 2001-<?php echo date('Y');?>, shaun@shat.net</font></p>
+<hr><p align="right"><font face="verdana,arial" size=1 color="#000000"><?echo $nqtdate;?><a href="https://github.com/sethcoder/nqt"><font color="#777777">Network Query Tool v<?echo $nqtversion?></a></p>
