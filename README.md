@@ -1,5 +1,7 @@
 Network Query Tool PHP script
 
+As of May 21,2013, this package is now a RFSCMS module. It can work as standalone as well.
+
 I didn't make this script, but it is really good.
 Recently, I searched the web for the original to see of there were any updates but I couldn't find it.
 I am making a repository to maintain it.
