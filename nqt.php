@@ -1,4 +1,3 @@
-
 <?
 ########################################################################
 # nqt.php                                                              #
@@ -426,4 +425,4 @@ else {
 }
 
 ?>
-<hr><p align="right"><font face="verdana,arial" size=1 color="#000000"><?echo $nqtdate;?><a href="https://github.com/sethcoder/nqt"><font color="#777777">Network Query Tool v<?echo $nqtversion?></a></p>
+<hr><p align="right"><font face="verdana,arial" size=1 color="#000000"><?echo $nqtdate;?><a href="https://github.com/sethcoder/nqt"> <font color="#777777">Network Query Tool v<?echo $nqtversion?></a></p>
