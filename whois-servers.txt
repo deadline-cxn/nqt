@@ -2,7 +2,7 @@
 ;Maintained by Nir Sofer
 ;This servers list if freely available for any use and without any restriction. 
 ;For more information: http://www.nirsoft.net/whois_servers_list.html
-;Last updated on 23/04/2013
+;Last updated on 04/07/2013
 ac whois.nic.ac
 ae whois.aeda.net.ae
 aero whois.aero
@@ -25,7 +25,7 @@ bj www.nic.bj
 br whois.nic.br
 br.com whois.centralnic.com
 bt whois.netnames.net
-by whois.ripe.net
+by whois.cctld.by
 bz whois.belizenic.bz
 ca whois.cira.ca
 cat whois.cat
@@ -50,7 +50,7 @@ dz whois.nic.dz
 edu whois.educause.net
 ee whois.tld.ee
 eg whois.ripe.net
-es whois.ripe.net
+es whois.nic.es
 eu whois.eu
 eu.com whois.centralnic.com
 fi whois.ficora.fi
@@ -69,7 +69,7 @@ gs whois.nic.gs
 hk whois.hknic.net.hk
 hm whois.registry.hm
 hn whois2.afilias-grs.net
-hr whois.ripe.net
+hr whois.dns.hr
 hu whois.nic.hu
 hu.com whois.centralnic.com
 ie whois.domainregistry.ie
@@ -146,7 +146,7 @@ tj whois.nic.tj
 tk whois.nic.tk
 tl whois.domains.tl
 tm whois.nic.tm
-tn whois.ripe.net
+tn whois.ati.tn
 to whois.tonic.to
 tp whois.domains.tl
 tr whois.nic.tr
