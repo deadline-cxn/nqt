@@ -23,6 +23,6 @@ Network Query Tool is Copyright (C) shaun@shat.net. If you use this
  about the terms of this license, you may contact the author by       
  visiting <http://shat.net/contact.php>.                              
 
-
-
+Thanks,
+Seth
 
