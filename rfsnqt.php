@@ -3,7 +3,7 @@ chdir("../../");
 include("header.php");
 
 
-chdir("modules/rfscms-nqt");
+chdir("modules/nqt");
 include("nqt.php");
 
 chdir("../../");
