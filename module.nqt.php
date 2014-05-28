@@ -15,7 +15,7 @@ $RFS_ADDON_AUTHOR_EMAIL="seth.parson@rfscms.org";
 $RFS_ADDON_AUTHOR_WEBSITE="http://rfscms.org/";
 $RFS_ADDON_IMAGES="";
 $RFS_ADDON_FILE_URL="";
-$RFS_ADDON_GIT_REPOSITORY="";
+$RFS_ADDON_GIT_REPOSITORY="https://github.com/sethcoder/nqt.git";
 $RFS_ADDON_URL=lib_modules_get_base_url_from_file(__FILE__);
 
 lib_menus_register("NQT","$RFS_SITE_URL/modules/rfscms-nqt/rfsnqt.php");
