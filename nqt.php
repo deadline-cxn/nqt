@@ -1,4 +1,4 @@
-<?
+<?php
 ########################################################################
 # nqt.php                                                              #
 #                                                                      #
@@ -151,7 +151,7 @@ echo "<script>function m(el) {
 ?>
 <div align="center">
   <h2>Network Query Tool</h2>
-  <form method="post" action="<? echo $PHP_SELF; ?>">
+  <form method="post" action="<?php echo $PHP_SELF; ?>">
   
   <input type=hidden name=action value=nqt>
   
@@ -207,7 +207,7 @@ value="Enter host or IP" onFocus="m(this)">
     </table>
   </form>
 </div>
-<?
+<?php
 
 #Global kludge for new gethostbyaddr() behavior in PHP 4.1x
 $ntarget = "";
@@ -425,4 +425,4 @@ else {
 }
 
 ?>
-<hr><p align="right"><font face="verdana,arial" size=1 color="#000000"><?echo $nqtdate;?><a href="https://github.com/sethcoder/nqt"> <font color="#777777">Network Query Tool v<?echo $nqtversion?></a></p>
+<hr><p align="right"><font face="verdana,arial" size=1 color="#000000"><?php echo $nqtdate;?><a href="https://github.com/sethcoder/nqt"> <font color="#777777">Network Query Tool v<?php echo $nqtversion?></a></p>
